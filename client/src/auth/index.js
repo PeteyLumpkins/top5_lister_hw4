@@ -44,6 +44,10 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.loginUser = async function() {
+        
+    }
+
     auth.getLoggedIn = async function () {
         const response = await api.getLoggedIn();
         if (response.status === 200) {

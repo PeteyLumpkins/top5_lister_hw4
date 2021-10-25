@@ -2,6 +2,58 @@ const auth = require('../auth')
 const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 
+
+loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        // All fields given?
+        if (!email || !password) {
+            return res.status(401).json({errorMessage: "Please enter all required fields."});
+        }
+
+        let user = await User.findOne({email: email});
+        
+        // Does the user exist?
+        if (!user) {
+            return res.status(401).json({errorMessage: "No users found with email: " + email});
+        }
+
+        const passwordHash = await bcrypt.hash(password, user.salt);
+
+        // Do the passwords match?
+        if (passwordHash !== user.passwordHash) {
+            return res.status(401).json({ 
+                errorMessage: "Invalid password",
+            });
+        }
+
+        // Valid user -> get them a token
+        const token = auth.signToken(user)
+
+        await res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        }).status(200).json({
+            success: true,
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email
+            }
+        }).send();
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send();
+    }
+}
+
+logoutUser = async (req, res) => {
+
+}
+
 getLoggedIn = async (req, res) => {
     auth.verify(req, res, async function () {
         const loggedInUser = await User.findOne({ _id: req.userId });
@@ -53,7 +105,7 @@ registerUser = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            firstName, lastName, email, passwordHash
+            firstName, lastName, email, passwordHash, salt
         });
         const savedUser = await newUser.save();
 
@@ -80,5 +132,7 @@ registerUser = async (req, res) => {
 
 module.exports = {
     getLoggedIn,
-    registerUser
+    registerUser,
+    loginUser,
+    logoutUser,
 }
