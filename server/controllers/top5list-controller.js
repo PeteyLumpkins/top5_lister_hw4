@@ -95,6 +95,7 @@ getTop5ListById = async (req, res) => {
         return res.status(200).json({ success: true, top5List: list })
     }).catch(err => console.log(err))
 }
+
 getTop5Lists = async (req, res) => {
     await Top5List.find({}, (err, top5Lists) => {
         if (err) {
@@ -108,17 +109,18 @@ getTop5Lists = async (req, res) => {
         return res.status(200).json({ success: true, data: top5Lists })
     }).catch(err => console.log(err))
 }
+
 getTop5ListPairs = async (req, res) => {
-    await Top5List.find({ }, (err, top5Lists) => {
+    await Top5List.find({ownerEmail: req.params.email }, (err, top5Lists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!top5Lists) {
-            console.log("!top5Lists.length");
-            return res
-                .status(404)
-                .json({ success: false, error: 'Top 5 Lists not found' })
-        }
+        // if (!top5Lists) {
+        //     console.log("!top5Lists.length");
+        //     return res
+        //         .status(404)
+        //         .json({ success: false, error: 'Top 5 Lists not found' })
+        // }
         else {
             // PUT ALL THE LISTS INTO ID, NAME PAIRS
             let pairs = [];

@@ -50,10 +50,6 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.foo = async function(param) {
-        console.log("Hey look it's me " + param);
-    }
-
     auth.loginUser = async function(userData, store) {
         const response = await api.loginUser(userData);
         if (response.status === 200) {
