@@ -50,7 +50,10 @@ loginUser = async (req, res) => {
 }
 
 logoutUser = async (req, res) => {
-
+    res.cookie("token", "token", {maxAge: -1}).status(200).json({ 
+        success: true, 
+        message: "User has logged out successfully!"
+    }).send();
 }
 
 getLoggedIn = async (req, res) => {

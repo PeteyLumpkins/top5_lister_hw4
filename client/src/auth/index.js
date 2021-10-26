@@ -27,11 +27,17 @@ function AuthContextProvider(props) {
     const authReducer = (action) => {
         const { type, payload } = action;
         switch (type) {
+            case AuthActionType.LOGOUT_USER: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false
+                });
+            }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true
-                })
+                });
             }
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
@@ -62,6 +68,17 @@ function AuthContextProvider(props) {
             history.push("/");
             store.loadIdNamePairs();
         }
+    }
+
+    auth.logoutUser = async function() {
+        const response = await api.logoutUser();
+        if (response.status === 200) {
+            authReducer({
+                type: AuthActionType.LOGOUT_USER,
+                payload: null
+            });
+        }
+        history.push("/")
     }
 
     auth.getLoggedIn = async function () {
