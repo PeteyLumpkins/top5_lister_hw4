@@ -27,6 +27,12 @@ function AuthContextProvider(props) {
     const authReducer = (action) => {
         const { type, payload } = action;
         switch (type) {
+            case AuthActionType.LOGIN_USER: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: true
+                })
+            }
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
@@ -44,8 +50,22 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.loginUser = async function() {
-        
+    auth.foo = async function(param) {
+        console.log("Hey look it's me " + param);
+    }
+
+    auth.loginUser = async function(userData, store) {
+        const response = await api.loginUser(userData);
+        if (response.status === 200) {
+            authReducer({
+                type: AuthActionType.LOGIN_USER,
+                payload: {
+                    user: response.data.user
+                }
+            });
+            history.push("/");
+            store.loadIdNamePairs();
+        }
     }
 
     auth.getLoggedIn = async function () {

@@ -27,6 +27,7 @@ export default function RegisterScreen() {
             password: formData.get('password'),
             passwordVerify: formData.get('passwordVerify')
         }, store);
+
     };
 
     return (
