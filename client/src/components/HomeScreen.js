@@ -4,6 +4,7 @@ import ListCard from './ListCard.js'
 import { Fab, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import List from '@mui/material/List';
+import DeleteListModel from './DeleteListModel';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -19,6 +20,7 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
+
     let listCard = "";
     if (store) {
         listCard = 
@@ -52,6 +54,10 @@ const HomeScreen = () => {
                     listCard
                 }
             </div>
+        <DeleteListModel 
+            open={store.listMarkedForDeletion !== null}
+            listName={store.listMarkedForDeletion !== null ? store.listMarkedForDeletion.name : ""}
+        />
         </div>)
 }
 
