@@ -81,6 +81,9 @@ export default function AppBanner() {
     }
     
     function getAccountMenu(loggedIn) {
+        if (loggedIn) {
+            return auth.user.firstName[0] + auth.user.lastName[0];
+        }
         return <AccountCircle />;
     }
 
@@ -113,7 +116,7 @@ export default function AppBanner() {
                 </Toolbar>
             </AppBar>
             {
-                menu
+               menu
             }
         </Box>
     );
