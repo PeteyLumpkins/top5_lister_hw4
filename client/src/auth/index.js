@@ -11,12 +11,15 @@ export const AuthActionType = {
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
+    DISPLAY_ERROR_MESSAGE: "DISPLAY_ERROR_MESSAGE",
+    CLEAR_ERROR_MESSAGE: "CLEAR_ERROR_MESSAGE"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        errorMessage: null
     });
     const history = useHistory();
 
@@ -27,46 +30,80 @@ function AuthContextProvider(props) {
     const authReducer = (action) => {
         const { type, payload } = action;
         switch (type) {
+            case AuthActionType.CLEAR_ERROR_MESSAGE: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    errorMessage: null,
+                });
+            }
+            case AuthActionType.DISPLAY_ERROR_MESSAGE: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false, 
+                    errorMessage: payload.errorMessage
+                });
+            }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    errorMessage: null
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    errorMessage: null
                 });
             }
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    errorMessage: null
                 });
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
-                })
+                    loggedIn: true,
+                    errorMessage: null
+                });
             }
             default:
                 return auth;
         }
     }
 
+    auth.clearErrorMessage = function() {
+        authReducer({
+            type: AuthActionType.CLEAR_ERROR_MESSAGE,
+            payload: null,
+        });
+    }
+
     auth.loginUser = async function(userData, store) {
-        const response = await api.loginUser(userData);
-        if (response.status === 200) {
+        try {
+            const response = await api.loginUser(userData)
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                });
+                history.push("/");
+                store.loadIdNamePairs();
+            } 
+        } catch(err) {
             authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
+                type: AuthActionType.DISPLAY_ERROR_MESSAGE,
+                payload: { 
+                    errorMessage: err.response.data.errorMessage,
                 }
             });
-            history.push("/");
-            store.loadIdNamePairs();
         }
     }
 

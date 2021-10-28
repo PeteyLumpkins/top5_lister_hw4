@@ -8,21 +8,21 @@ loginUser = async (req, res) => {
 
         // All fields given?
         if (!email || !password) {
-            return res.status(401).json({errorMessage: "Please enter all required fields."});
+            return res.status(400).json({errorMessage: "Please enter all required fields."});
         }
 
         let user = await User.findOne({email: email});
         
         // Does the user exist?
         if (!user) {
-            return res.status(401).json({errorMessage: "No users found with email: " + email});
+            return res.status(400).json({errorMessage: "No users found with email: " + email});
         }
 
         const passwordHash = await bcrypt.hash(password, user.salt);
 
         // Do the passwords match?
         if (passwordHash !== user.passwordHash) {
-            return res.status(401).json({ 
+            return res.status(400).json({ 
                 errorMessage: "Invalid password",
             });
         }
@@ -128,7 +128,7 @@ registerUser = async (req, res) => {
         }).send();
     } catch (err) {
         console.error(err);
-        res.status(500).send();
+        res.status(500).json({errorMessage: "An unknown error occurred."}).send();
     }
 }
 

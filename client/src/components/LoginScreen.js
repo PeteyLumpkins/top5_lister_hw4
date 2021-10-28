@@ -17,6 +17,8 @@ import { useContext } from 'react';
 import { GlobalStoreContext } from '../store';
 import AuthContext from '../auth';
 
+import InvalidInputModal from './InvalidInputModal';
+
 export default function LoginScreen(props) {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -28,10 +30,9 @@ export default function LoginScreen(props) {
         auth.loginUser({
             email: data.get('email'), 
             password: data.get('password')
-        }, store);
-        
+        }, store)
     };
-    
+
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>
             <CssBaseline />
@@ -114,6 +115,7 @@ export default function LoginScreen(props) {
                 </Box>
             </Box>
             </Grid>
+        <InvalidInputModal open={auth.errorMessage !== null} message={auth.errorMessage}/>
         </Grid>
     );
 }
