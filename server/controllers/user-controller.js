@@ -15,7 +15,7 @@ loginUser = async (req, res) => {
         
         // Does the user exist?
         if (!user) {
-            return res.status(400).json({errorMessage: "No users found with email: " + email});
+            return res.status(400).json({errorMessage: "Invalid username or password"});
         }
 
         const passwordHash = await bcrypt.hash(password, user.salt);
@@ -23,7 +23,7 @@ loginUser = async (req, res) => {
         // Do the passwords match?
         if (passwordHash !== user.passwordHash) {
             return res.status(400).json({ 
-                errorMessage: "Invalid password",
+                errorMessage: "Invalid username or password",
             });
         }
 
