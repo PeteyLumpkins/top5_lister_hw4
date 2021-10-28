@@ -132,16 +132,25 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(userData, store) {
-        const response = await api.registerUser(userData);      
-        if (response.status === 200) {
+        try {
+            const response = await api.registerUser(userData);      
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+                store.loadIdNamePairs();
+            }
+        } catch (err) {
             authReducer({
-                type: AuthActionType.REGISTER_USER,
-                payload: {
-                    user: response.data.user
+                type: AuthActionType.DISPLAY_ERROR_MESSAGE,
+                payload: { 
+                    errorMessage: err.response.data.errorMessage,
                 }
-            })
-            history.push("/");
-            store.loadIdNamePairs();
+            });
         }
     }
 

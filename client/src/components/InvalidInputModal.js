@@ -26,7 +26,7 @@ export default function InvalidInputModal(props) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-            {"User Login Failed"}
+            {props.title}
             </DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -39,4 +39,4 @@ export default function InvalidInputModal(props) {
         </Dialog>
         </div>
     );
-    }
+}
