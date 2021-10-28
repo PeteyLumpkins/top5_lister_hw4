@@ -5,6 +5,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 
 import AuthContext from '../auth';
 import {useContext} from 'react';
@@ -22,20 +25,14 @@ export default function InvalidInputModal(props) {
         <Dialog
             open={props.open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-            {props.title}
-            </DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {props.message}
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button onClick={handleClose}>Close</Button>
-            </DialogActions>
+            <Alert severity="error">
+                {props.title + " - " + props.message}
+                <IconButton onClick={handleClose}>
+                    <CloseIcon/>
+                </IconButton>
+            </Alert>
+
         </Dialog>
         </div>
     );

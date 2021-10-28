@@ -124,7 +124,7 @@ export default function RegisterScreen() {
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
                 <InvalidInputModal 
-                    title={"Register User Failed"}
+                    title={"User Registration Failed"}
                     open={auth.errorMessage !== null} 
                     message={auth.errorMessage} 
                 />

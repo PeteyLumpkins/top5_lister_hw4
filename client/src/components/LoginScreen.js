@@ -116,7 +116,7 @@ export default function LoginScreen(props) {
             </Box>
             </Grid>
         <InvalidInputModal 
-            title={"Login User Failed"}
+            title={"User Login Failed"}
             open={auth.errorMessage !== null} 
             message={auth.errorMessage}/>
         </Grid>
