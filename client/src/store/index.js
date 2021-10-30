@@ -138,7 +138,7 @@ function GlobalStoreContextProvider(props) {
                     currentList: store.currentList,
                     newListCounter: store.newListCounter,
                     isListNameEditActive: false,
-                    isItemEditActive: true,
+                    isItemEditActive: payload.isEditActive,
                     listMarkedForDeletion: null
                 });
             }
@@ -372,10 +372,12 @@ function GlobalStoreContextProvider(props) {
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING AN ITEM
-    store.setIsItemEditActive = function () {
+    store.setIsItemEditActive = function (isEditActive) {
         storeReducer({
             type: GlobalStoreActionType.SET_ITEM_EDIT_ACTIVE,
-            payload: null
+            payload: { 
+                isEditActive: isEditActive,
+            }
         });
     }
 

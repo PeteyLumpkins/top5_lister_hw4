@@ -14,7 +14,27 @@ import EditIcon from '@mui/icons-material/Edit';
 function Top5Item(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
+    const [text, setText] = useState(props.text);
     const [draggedTo, setDraggedTo] = useState(0);
+
+    function handleEditStart() {
+        setEditActive(true);
+        store.setIsItemEditActive(true);
+    }
+
+    function handleEditText(event) {
+        setText(event.target.value);
+    }
+
+    function handleEditEnd(event) {
+        console.log("Hit key")
+        if (event.code === "Enter") {
+            console.log("Hit enteer")
+            store.addUpdateItemTransaction(index, text);
+            store.updateItem(index, text);
+            setEditActive(false);
+        }
+    }
 
     function handleDragStart(event, targetId) {
         event.dataTransfer.setData("item", targetId);
@@ -51,45 +71,75 @@ function Top5Item(props) {
     let { index } = props;
 
     let itemClass = "top5-item";
+
     if (draggedTo) {
         itemClass = "top5-item-dragged-to";
     }
 
-    return (
-            <ListItem
-                id={'item-' + (index+1)}
-                key={props.key}
-                className={itemClass}
-                onDragStart={(event) => {
-                    handleDragStart(event, (index+1))
+    if (editActive) {
+
+        return (
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id={"item-" + (index + 1)}
+                label="Top 5 List Item"
+                name="name"
+                autoComplete="Top 5 List Item"
+                className='itemClass'
+                onKeyPress={(event) => {
+                    handleEditEnd(event);
                 }}
-                onDragOver={(event) => {
-                    handleDragOver(event, (index+1))
+                onChange={(event) => {
+                    handleEditText(event);
                 }}
-                onDragEnter={(event) => {
-                    handleDragEnter(event, (index+1))
-                }}
-                onDragLeave={(event) => {
-                    handleDragLeave(event, (index+1))
-                }}
-                onDrop={(event) => {
-                    handleDrop(event, (index+1))
-                }}
-                draggable="true"
-                sx={{ display: 'flex', p: 1 }}
-                style={{
-                    fontSize: '48pt',
-                    width: '100%'
-                }}
-            >
-            <Box sx={{ p: 1 }}>
-                <IconButton aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}}  />
-                </IconButton>
-            </Box>
-                <Box sx={{ p: 1, flexGrow: 1 }}>{props.text}</Box>
-            </ListItem>
-    )
+                defaultValue={props.text}
+                inputProps={{style: {fontSize: 48}}}
+                InputLabelProps={{style: {fontSize: 24}}}
+                autoFocus
+            />
+        );
+    } else {
+        return (
+                <ListItem
+                    id={'item-' + (index+1)}
+                    key={props.key}
+                    className={itemClass}
+                    onDragStart={(event) => {
+                        handleDragStart(event, (index+1))
+                    }}
+                    onDragOver={(event) => {
+                        handleDragOver(event, (index+1))
+                    }}
+                    onDragEnter={(event) => {
+                        handleDragEnter(event, (index+1))
+                    }}
+                    onDragLeave={(event) => {
+                        handleDragLeave(event, (index+1))
+                    }}
+                    onDrop={(event) => {
+                        handleDrop(event, (index+1))
+                    }}
+                    draggable="true"
+                    sx={{ display: 'flex', p: 1 }}
+                    style={{
+                        fontSize: '48pt',
+                        width: '100%'
+                    }}
+                >
+                <Box sx={{ p: 1 }}>
+                    <IconButton aria-label='edit'>
+                        <EditIcon style={{fontSize:'48pt'}}  
+                            onClick={handleEditStart}
+                        />
+                    </IconButton>
+                </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{props.text}</Box>
+                </ListItem>
+        );
+    }
+
 }
 
 export default Top5Item;
