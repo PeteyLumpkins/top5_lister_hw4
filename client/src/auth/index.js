@@ -138,8 +138,6 @@ function AuthContextProvider(props) {
                 }
             });
         }
-        console.log(auth.loggedIn);
-        console.log(auth.user);
     }
 
     auth.registerUser = async function(userData, store) {

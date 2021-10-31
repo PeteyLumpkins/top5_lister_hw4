@@ -18,11 +18,11 @@ loginUser = async (req, res) => {
             return res.status(400).json({errorMessage: "Invalid username or password"});
         }
 
-        const passwordHash = await bcrypt.hash(password, user.salt);
+        const passwordCorrect = await bcrypt.compare(password, user.passwordHash);
 
         // Do the passwords match?
-        if (passwordHash !== user.passwordHash) {
-            return res.status(400).json({ 
+        if (!passwordCorrect) {
+            return res.status(401).json({ 
                 errorMessage: "Invalid username or password",
             });
         }
@@ -107,7 +107,7 @@ registerUser = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            firstName, lastName, email, passwordHash, salt
+            firstName, lastName, email, passwordHash
         });
         const savedUser = await newUser.save();
 
