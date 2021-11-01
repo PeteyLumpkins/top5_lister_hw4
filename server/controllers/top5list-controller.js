@@ -1,12 +1,14 @@
 const Top5List = require('../models/top5list-model');
 
 createTop5List = (req, res) => {
-    const body = req.body;
+    let body = req.body;
+    body.ownerId = req.userId
+
     if (!body) {
         return res.status(400).json({
             success: false,
             error: 'You must provide a Top 5 List',
-        })
+        });
     }
 
     const top5List = new Top5List(body);
@@ -92,6 +94,10 @@ getTop5ListById = async (req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
+
+        if (list.ownerId !== req.userId) {
+            return res.status(401).json({ success: false, error: "Unauthorized" });
+        }
         return res.status(200).json({ success: true, top5List: list })
     }).catch(err => console.log(err))
 }
@@ -114,14 +120,7 @@ getTop5ListPairs = async (req, res) => {
     await Top5List.find({ownerEmail: req.params.email }, (err, top5Lists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
-        }
-        // if (!top5Lists) {
-        //     console.log("!top5Lists.length");
-        //     return res
-        //         .status(404)
-        //         .json({ success: false, error: 'Top 5 Lists not found' })
-        // }
-        else {
+        } else {
             // PUT ALL THE LISTS INTO ID, NAME PAIRS
             let pairs = [];
             for (let key in top5Lists) {
