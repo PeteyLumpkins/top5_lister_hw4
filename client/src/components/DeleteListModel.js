@@ -31,7 +31,7 @@ export default function DeleteListModel(props) {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-            {"Are you sure you want to delete the " + props.listName + " Top 5 List?"}
+            {"Are you sure you want to delete the Top 5 " + props.listName + " List?"}
             </DialogTitle>
             <DialogActions>
             <Button onClick={handleDelete}>Delete</Button>

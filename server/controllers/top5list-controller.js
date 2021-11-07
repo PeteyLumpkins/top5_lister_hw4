@@ -98,6 +98,7 @@ getTop5ListById = async (req, res) => {
         if (list.ownerId !== req.userId) {
             return res.status(401).json({ success: false, error: "Unauthorized" });
         }
+        
         return res.status(200).json({ success: true, top5List: list })
     }).catch(err => console.log(err))
 }

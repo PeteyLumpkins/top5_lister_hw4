@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import AuthContext from '../auth';
 import {useContext} from 'react';
 
-export default function InvalidInputModal(props) {
+export default function ErrorModal(props) {
 
     const { auth } = useContext(AuthContext);
 

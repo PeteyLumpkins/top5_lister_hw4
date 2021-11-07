@@ -17,7 +17,7 @@ import { useContext } from 'react';
 import { GlobalStoreContext } from '../store';
 import AuthContext from '../auth';
 
-import InvalidInputModal from './InvalidInputModal';
+import ErrorModal from './ErrorModal';
 
 export default function LoginScreen(props) {
     const { auth } = useContext(AuthContext);
@@ -115,7 +115,7 @@ export default function LoginScreen(props) {
                 </Box>
             </Box>
             </Grid>
-        <InvalidInputModal 
+        <ErrorModal 
             title={"User Login Failed"}
             open={auth.errorMessage !== null} 
             message={auth.errorMessage}/>

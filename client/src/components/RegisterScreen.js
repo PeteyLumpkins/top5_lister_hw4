@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { GlobalStoreContext } from '../store'
 
-import InvalidInputModal from './InvalidInputModal';
+import ErrorModal from './ErrorModal';
 
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
@@ -123,7 +123,7 @@ export default function RegisterScreen() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
-                <InvalidInputModal 
+                <ErrorModal 
                     title={"User Registration Failed"}
                     open={auth.errorMessage !== null} 
                     message={auth.errorMessage} 
